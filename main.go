@@ -12,15 +12,13 @@ func main() {
 	if port == "" {
 		log.Fatal("$PORT must be set")
 	}
-
+	
 	app := gin.Default()
-
-//	app.GET("/lists", ListsList)
-//	app.GET("/lists/:list_id", ListsDetail)
-	app.Static("/", "public")
-
+	
+	app.GET("/lists", ListsList)
+	app.GET("/lists/:list_id", ListsDetail)
+	app.Static("/public", "public")
 	
 	app.Run(":" + port)
-
 }
 

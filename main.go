@@ -3,7 +3,6 @@ package main
 import (
 	"log"
 	"os"
-	"time"
 	"github.com/hsjunnesson/top-five/Godeps/_workspace/src/github.com/gin-gonic/gin"
 )
 

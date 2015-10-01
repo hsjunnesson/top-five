@@ -14,19 +14,11 @@ func main() {
 		log.Fatal("$PORT must be set")
 	}
 
-	list := List{Id: "", Title: "This is a title", Items: [5]string{"one", "two", "three", "four", "five"}, Timestamp: time.Now()}
-	id, err := CreateList(redisClient, list)
-	if err != nil {
-		log.Printf("error", err)
-	} else {
-		log.Printf("Id: %i", id)
-	}	
-
-
-	
 	app := gin.Default()
 	app.GET("/lists", ListsList)
 	app.GET("/lists/:list_id", ListsDetail)
+
+	app.Static("/public", "./public")
 	
 	app.Run(":" + port)
 

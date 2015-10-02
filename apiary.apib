@@ -1,0 +1,173 @@
+FORMAT: 1A
+HOST: https://www.top-five-things.com/
+
+# Top Five Things
+
+Top Five Things is an API for creating top five lists on [www.top-five-things.com](https://www.top-five-things.com)
+
+## Media Types
+Where applicable this API uses the [HAL+JSON](https://github.com/mikekelly/hal_specification/blob/master/hal_specification.md) media-type to represent resources states and affordances.
+
+
+Requests with a message-body are using plain JSON to set or update resource states.
+
+# Group Resources
+
+# API Root [/]
+
+This resource does not have any attributes. Instead it offers the root links to the
+top level resources which make up the entire API.
+
+## Retrieve the top level entry points [GET]
+
++ Response 200 (application/hal+json)
+
+    + Body
+    
+            {
+                "_links": {
+                    "self": { "href": "/"},
+                    "lists": { "href": "/lists" }
+                }
+            }
+
+# List [/lists/{id}{?access_token}]
+
+A single List object. It represents a top-five list.
+
+The List resource has the following attributes.
+
++ id
++ title
++ created_at
++ list_items
+
+The states *id* and *created_at* are initialized by the API at creation.
+
++ Parameters
+    + id (string) - ID of the List.
+    
++ Model (application/hal+json)
+
+    HAL+JSON representation of a List resource.
+    
+    + Body
+    
+            {
+                "_links": {
+                    "self": { "href": "/lists/123" }
+                },
+                "id": "123",
+                "title": "Top Five Board Games",
+                "created_at": "2015-10-02T15:34:00.00Z",
+                "list_items": ["Twilight Struggle", "Terra Mystica", "Caverna: The Cave Farmers", "Through the Ages: A Story of Civilization", "Puerto Rico"]
+            }
+
+## Retrieving a List [GET]
+
++ Response 200
+
+    [List][]
+
+## Edit a List [PATCH]
+
+To update a List send a JSON with updated value for one or more of the List resource attributes.
+
+May not patch *id* or *created_at*
+
++ Parameters
+
+    + access_token (string) - top-five-things API access token.
+
++ Request (application/json)
+
+            {
+                "title": "New title",
+                "list_items": ["one", "two", "three", "four", "five"]
+            }
+
++ Response 200
+
+    [List][]
+
+## Delete a List [DELETE]
+
+This action requires an `access_token` with `list_write` scope.
+
++ Parameters
+
+    + access_token (string) - top-five-things API access token.
+
++ Response 204
+
+
+# Lists Collection [/lists{?access_token}]
+
+Collection of all lists.
+
+The List collection resource has the following attributes:
+
++ count
+
+In addition it **embeds** *List Resource*.
+
++ Model (application/hal+json)
+
+        HAL+JSON representation of List collection resource.
+        Note that the embedded List resources are incomplete. Follow the link to retrieve a fully qualified List.
+
+    + Body
+
+            {
+                "_links": {
+                    "self": { "href": "/lists" }
+                },
+                "_embedded": {
+                    "lists": [
+                        {
+                            "_links": {
+                                "self": { "href": "/lists/123" }
+                            },
+                            "id": "123",
+                            "title": "Top Five Board Games",
+                            "created_at": "2015-10-02T15:34:00.00Z"
+                        },
+                        {
+                            "_links": {
+                                "self": { "href": "/lists/234" }
+                            },
+                            "id": "234",
+                            "title": "Top Five Dylan Songs",
+                            "created_at": "2015-10-01T12:00:00.00Z"
+                        }
+                    ]
+                },
+                "count": 2
+            }
+
+## List All Lists [GET]
+
++ Response 200
+
+    [Lists Collection][]
+
+## Create a List [POST]
+
+To create a new list, provide a JSON of the *title* and *list_items* array.
+
+This action requires an `access_token` with `list_write` scope.
+
++ Parameters
+    
+    + access_token (string) - top-five-things API access token.
+    
++ Request (application/json)
+
+        {
+            "title": "Top Five Johnny Cash Songs",
+            "list_items": ["Hurt", "The Man Comes Around", "Bridge Over Troubled Water", "One", "I Hung My Head"]
+        }
+
++ Response 201
+
+    [List][]

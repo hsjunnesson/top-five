@@ -9,48 +9,81 @@ import (
 )
 
 type List struct {
-	Id          string    `json:"id"`
-	Title       string    `json:"title"`
-	Items       [5]string `json:"items"`
-	Timestamp   time.Time `json:"timestamp"`
+	Id          string
+	Title       string
+	CreatedAt   time.Time
+	ListItems   [5]string
 }
 
 type Lists []List
 
-func CreateList(client *redis.Client, l List) (int64, error) {
-	timestamp := l.Timestamp.Format(time.RFC3339)
+// Creates a List in the connected redis.
+// Returns the id of the List, or error.
+func CreateListDB(client *redis.Client, title string, listItems [5]string) (string, error) {
+	timestamp := time.Now().Format(time.RFC3339)
 	
 	id, err := client.Incr("next_list_id").Result()
 	if err != nil {
 		log.Printf("Couldn't increment next_list_id", err)
-		return 0, err
+		return "", err
 	}
 	
 	strId := strconv.FormatInt(id, 10)
 	
 	if client.HMSet(
 		"list:" + strId,
-		"Id", strId,
-		"Title", l.Title,
-		"Timestamp", timestamp,		
+		"id", strId,
+		"title", title,
+		"created_at", timestamp,		
 	).Err() != nil {
 		log.Printf("Couldn't HMSet list:" + strId, err)
-		return 0, err
+		return "", err
 	}
 	
-	for _, val := range l.Items {
+	for _, val := range listItems {
 		if client.RPush("list_items:" + strId, val).Err() != nil {
 			log.Printf("Couldn't RPush list_items:" + strId, err)
-			return 0, err
+			return "", err
 		}
 	}
 	
 	if client.LPush("lists", strId).Err() != nil {
 		log.Printf("Couldn't LPush lists " + strId, err)
-		return 0, err
+		return "", err
 	}
 	
-	return id, nil
+	return strId, nil
+}
+
+// Fetches a List from the connected redis.
+func GetListDB(client *redis.Client, id string) (*List, error) {
+	parts, err := client.HMGet("list:" + id, "id", "title", "created_at").Result()
+	if err != nil {
+		log.Printf("Could not HMGet list:" + id, err)
+		return nil, err
+	}
+
+	id, err := parts[0].(string)
+	if err != nil {
+		return nil, err
+	}
+
+	title, err := parts[1].(string)
+	if err != nil {
+		return nil, err
+	}
+
+		
+	
+	var items = [5]string{"one", "two", "three", "four", "five"}
+	list := List{
+		Id: parts[0],
+		Title: parts[1],
+		CreatedAt: time.New(parts[2]),
+		ListItems: items,
+	}
+
+	return list, nil
 }
 
 func ListsList(c *gin.Context) {

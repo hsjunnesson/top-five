@@ -1,12 +1,17 @@
 {
-  "name": "top-file",
-  "description": "Web server for top-five.com",
-  "keywords": [
-    "top-five",
-    "go"
-  ],
-  "image": "heroku/go:1.5",
-  "mount_dir": "src/github.com/hsjunnesson/top-five",
-  "website": "https://top-five.com",
-  "repository": "http://github.com/hsjunnesson/top-five"
+    "name": "top-five-things",
+    "description": "Web server for top-five-things.com",
+    "keywords": [
+        "top-five",
+        "go"
+    ],
+    "image": "heroku/go:1.5",
+    "mount_dir": "src/github.com/hsjunnesson/top-five",
+    "website": "https://www.top-five-things.com",
+    "repository": "http://github.com/hsjunnesson/top-five",
+    "env": {
+        "REDIS_URL": {
+            "required": true
+        }
+    }
 }

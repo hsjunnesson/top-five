@@ -147,15 +147,19 @@ func DeleteListDB(client *redis.Client, id string) error {
 
 // Route handlers
 
-func ListsList(c *gin.Context) {
-	c.JSON(200, "Hej")
-}
-
-func ListsDetail(c *gin.Context) {
+func ListDetails(c *gin.Context) {
 //	list_id := c.Params.ByName("id")
 //	_, _ := strconv.Atoi(list_id)
 //	list := lists()[0]
 	//content := gin.H{"title": list.Title, "content": list.Items}
+	
+	id := c.Params.ByName("id")
+	list, err := GetListDB(c, id)
+
+	
+	
 	c.JSON(200, "Hoj")
 }
 
+func ListsCollection(c *gin.Context) {
+}

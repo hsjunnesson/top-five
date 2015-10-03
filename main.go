@@ -15,8 +15,9 @@ func main() {
 	
 	app := gin.Default()
 	
-	app.GET("/lists", ListsList)
-	app.GET("/lists/:list_id", ListsDetail)
+	app.GET("/lists/:id", ListDetails)
+	app.GET("/lists", ListsCollection)
+	
 	app.Static("/public", "public")
 	
 	app.Run(":" + port)

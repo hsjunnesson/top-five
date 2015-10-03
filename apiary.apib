@@ -6,10 +6,12 @@ HOST: https://www.top-five-things.com/
 Top Five Things is an API for creating top five lists on [www.top-five-things.com](https://www.top-five-things.com)
 
 ## Media Types
-Where applicable this API uses the [HAL+JSON](https://github.com/mikekelly/hal_specification/blob/master/hal_specification.md) media-type to represent resources states and affordances.
+Where applicable this API uses the [HAL+JSON](https://github.com/mikekelly/hal_specification/blob/master/hal_specification.md)
+media-type to represent resources states and affordances.
 
+Though all replies have `Content-type: application/json` for compatibility with client HTTP libraries.
 
-Requests with a message-body are using plain JSON to set or update resource states.
+Requests with a message-body use plain JSON to set or update resource states.
 
 # Group Resources
 
@@ -20,7 +22,7 @@ top level resources which make up the entire API.
 
 ## Retrieve the top level entry points [GET]
 
-+ Response 200 (application/hal+json)
++ Response 200 (application/json)
 
     + Body
     
@@ -47,7 +49,7 @@ The states *id* and *created_at* are initialized by the API at creation.
 + Parameters
     + id (string) - ID of the List.
     
-+ Model (application/hal+json)
++ Model (application/json)
 
     HAL+JSON representation of a List resource.
     
@@ -111,7 +113,7 @@ The List collection resource has the following attributes:
 
 In addition it **embeds** *List Resource*.
 
-+ Model (application/hal+json)
++ Model (application/json)
 
         HAL+JSON representation of List collection resource.
         Note that the embedded List resources are incomplete. Follow the link to retrieve a fully qualified List.

@@ -6,7 +6,8 @@
             [liberator.dev :refer [wrap-trace]]
             [ring.middleware.params :refer [wrap-params]]
             [compojure.core :refer [context ANY routes defroutes]]
-            [compojure.handler :refer [api]])
+            [compojure.handler :refer [api]]
+            [environ.core :refer [env]])
   (:use [top-five-things.index]
         [top-five-things.list]
         [top-five-things.util]
@@ -46,9 +47,7 @@
 (defn start [options]
   (jetty/run-jetty #'handler (assoc options :join? false)))
 
-(defn -main
-  ([port]
-     (start {:port (Integer/parseInt port)}))
-  ([]
-     (-main "8000")))
+(defn -main [& [port]]
+  (let [port (Integer. (or port (env :port) 5000))]
+    (start {:port port})))
 

@@ -1,7 +1,9 @@
 (ns top-five-things.list
   (:require [liberator.core :refer [defresource]]
-            [taoensso.carmine :as car :refer (wcar)])
+            [taoensso.carmine :as car :refer (wcar)]
+            [top-five-things.db.list :as db])
   (:use [top-five-things.util]))
+
 
 (defresource list-collection-resource
   :allowed-methods [:get]

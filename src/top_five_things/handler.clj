@@ -8,7 +8,7 @@
             [compojure.core :refer [context ANY routes defroutes]]
             [compojure.handler :refer [api]]
             [environ.core :refer [env]]
-            [top-five-things.db :as db])
+            [top-five-things.db.core :as db])
   (:use [top-five-things.index]
         [top-five-things.list]
         [top-five-things.util]
@@ -46,15 +46,10 @@
       api
       wrap-params))
 
-(defn start [options]
-  (db/init)
-  (jetty/run-jetty #'handler (assoc options :join? false)))
-
-(defn -main [& [port]]
+(defn -main []
   (let [port (Integer. (env :port))
         redis-url (env :redis-url)]
     (if (not port) (throw (Exception. "$PORT env not set.")))
     (if (not redis-url) (throw (Exception. "$REDIS_URL env not set")))
-    (db/init redis-url)
+    (db/connect! redis-url)
     (jetty/run-jetty #'handler {:port port :join? false})))
-

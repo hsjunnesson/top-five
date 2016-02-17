@@ -12,6 +12,6 @@
   :handle-ok
   (fn [ctx]
     (case (get-in ctx [:representation :media-type])
-      "text/html" (html5 [:body [:p "OK!"]])
+      "text/html" (html5 [:body [:p {:style "color: green"} "OK!" ]])
       "application/json" index-body)))
 

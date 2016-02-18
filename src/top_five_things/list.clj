@@ -12,10 +12,10 @@
   :handle-ok (fn [_] [[1], [2], [3, 4]])
   )
 
-(defresource list-resource
+(defresource list-resource [id]
   :allowed-methods [:get]
   :known-content-type? #(check-content-type % ["application/json"])
-  :exists? (fn [_] {::list [1, 2, 3, 4, 5]})
+  :exists? (fn [_] {::list (db/get-list id)})
   :available-media-types ["application/json"]
   :handle-ok ::list)
 

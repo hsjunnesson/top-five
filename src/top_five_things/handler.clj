@@ -53,3 +53,4 @@
     (if (not redis-url) (throw (Exception. "$REDIS_URL env not set")))
     (db/connect! redis-url)
     (jetty/run-jetty #'handler {:port port :join? false})))
+

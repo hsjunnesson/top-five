@@ -28,7 +28,8 @@
                  [ring/ring-defaults "0.3.2"]
                  [environ "1.1.0"]
                  [liberator "0.15.3"]
-                 [hiccup "1.0.5"]]
+                 [hiccup "1.0.5"]
+                 [com.taoensso/carmine "2.19.1"]]
   :plugins [[lein-ring "0.12.5"]]
   :ring {:handler top-five-things.handler/app}
   :profiles

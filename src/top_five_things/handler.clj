@@ -7,7 +7,8 @@
             [ring.middleware.params :refer [wrap-params]]
             [compojure.core :refer [context ANY routes defroutes]]
             [compojure.handler :refer [api]]
-            [environ.core :refer [env]])
+            [environ.core :refer [env]]
+            [top-five-things.db.core :as db])
   (:use [top-five-things.index]
         [top-five-things.list]
         [top-five-things.util]
@@ -36,7 +37,8 @@
    (routes
     (ANY "/" [] index-resource)
     (ANY "/static/*" [] static-resource)
-    (ANY ["/lists/:id" :id #".*"] [id] (list-resource id)))))
+    (ANY ["/lists/:id" :id #".*"] [id] (list-resource id))
+    (ANY "/lists" [] list-collection-resource))))
 
 (def handler
   (-> (assemble-routes)
@@ -44,10 +46,11 @@
       api
       wrap-params))
 
-(defn start [options]
-  (jetty/run-jetty #'handler (assoc options :join? false)))
-
-(defn -main [& [port]]
-  (let [port (Integer. (or port (env :port) 5000))]
-    (start {:port port})))
+(defn -main []
+  (let [port (Integer. (env :port))
+        redis-url (env :redis-url)]
+    (if (not port) (throw (Exception. "$PORT env not set.")))
+    (if (not redis-url) (throw (Exception. "$REDIS_URL env not set")))
+    (db/connect! redis-url)
+    (jetty/run-jetty #'handler {:port port :join? false})))
 

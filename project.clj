@@ -8,7 +8,9 @@
                  [ring/ring-jetty-adapter "1.4.0"]
                  [environ "1.0.1"]
                  [liberator "0.13"]
-                 [hiccup "1.0.5"]]
+                 [hiccup "1.0.5"]
+                 [com.taoensso/carmine "2.12.0"]
+                 [clj-time "0.11.0"]]
   :min-lein-version "2.0.0"
   :plugins [[environ/environ.lein "0.3.1"]
             [lein-ring "0.9.7"]]

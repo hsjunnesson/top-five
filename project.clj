@@ -26,12 +26,15 @@
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [compojure "1.6.1"]
                  [ring/ring-defaults "0.3.2"]
+                 [ring/ring-jetty-adapter "1.7.1"]
                  [environ "1.1.0"]
                  [liberator "0.15.3"]
                  [hiccup "1.0.5"]
                  [com.taoensso/carmine "2.19.1"]]
-  :plugins [[lein-ring "0.12.5"]]
+  :plugins [[lein-ring "0.12.5"]
+            [environ/environ.lein "0.3.1"]]
+  :hooks [environ.leiningen.hooks]
   :ring {:handler top-five-things.handler/app}
-  :profiles
-  {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
-                        [ring/ring-mock "0.3.2"]]}})
+  :uberjar-name "top-five-things.jar"
+  :profiles {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
+                                  [ring/ring-mock "0.3.2"]]}})
